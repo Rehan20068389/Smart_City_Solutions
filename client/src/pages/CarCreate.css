@@ -1,0 +1,76 @@
+/* Referance from chatgpt */
+
+/* Car Create Form Wrapper */
+.car-form {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 550px;
+  margin: 40px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Heading */
+.car-form h3 {
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Label Styling */
+.car-form label {
+  font-size: 1.1rem;
+  color: #444;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Input Styling */
+.car-form input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #c9c9c9;
+  margin-bottom: 18px;
+  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.car-form input:focus {
+  border-color: #4a4aff;
+  box-shadow: 0 0 6px rgba(74, 74, 255, 0.2);
+  outline: none;
+}
+
+/* Submit Button */
+.car-form button {
+  width: 100%;
+  padding: 14px;
+  background: #4a4aff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.car-form button:hover {
+  background: #2f2fe6;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
