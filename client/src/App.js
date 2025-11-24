@@ -4,6 +4,7 @@ import Nav from './components/Nav.jsx';
 import HomePage from './pages/HomePage';
 import Signup from './pages/Signup.jsx';
 import Login from './pages/Login.jsx';
+import CarCreate from './pages/CarCreate.jsx';
 function App() {
   return (
     <BrowserRouter>
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path='/login' element={<Login />} />
+         <Route path="/create-car" element={<CarCreate />} />
         </Routes>
       </div>
     </BrowserRouter>
