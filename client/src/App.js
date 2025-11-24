@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Nav from './components/Nav.jsx';
 import HomePage from './pages/HomePage';
 import Signup from './pages/Signup.jsx';
+import Login from './pages/Login.jsx';
 function App() {
   return (
     <BrowserRouter>
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path='/login' element={<Login />} />
         </Routes>
       </div>
     </BrowserRouter>
