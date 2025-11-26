@@ -1,40 +1,106 @@
-/* Referance from chatgpt */
-
+/* NAVBAR MAIN */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 14px 25px;
   background-color: #0f0e0e;
-  border-bottom: 2px solid #eee;
-  box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-/* Brand Name */
+/* Brand */
 .brand {
   font-size: 22px;
   font-weight: bold;
-  color: #eef2f8; 
+  color: #eef2f8;
   text-decoration: none;
 }
-
 .brand:hover {
-  color: #084298;
+  color: #0d6efd;
 }
 
-
+/* LINKS */
+.nav-links {
+  display: flex;
+  gap: 12px;
+}
 .nav-links a {
-  margin: 0 12px;
   color: #efe9e9;
   text-decoration: none;
   font-size: 15px;
   transition: 0.2s;
 }
-
- /* Hover effect  */
 .nav-links a:hover {
   color: #0d6efd;
+}
+
+/* USER MENU */
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-user-section {
+  margin-left: 20px; /* space between links and user menu */
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.user-menu {
+  position: relative;
+  cursor: pointer;
+  color: #fff;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* dropdown box */
+.user-dropdown {
+  position: absolute;
+  top: 38px;
+  right: 0;
+  background: #ffffff;
+  color: #000;
+  border-radius: 8px;
+  padding: 12px 15px;
+  width: 210px;
+  box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
+  display: none;
+}
+
+/* show class */
+.user-menu.open .user-dropdown {
+  display: block;
+}
+
+/* user info inside dropdown */
+.user-info {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.user-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+/* logout button inside dropdown */
+.logout-btn {
+  background: #ff4d4d;
+  color: #fff;
+  width: 100%;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.logout-btn:hover {
+  background: #e60000;
 }
