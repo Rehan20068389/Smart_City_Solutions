@@ -7,6 +7,7 @@ import Login from './pages/Login.jsx';
 import CarCreate from './pages/CarCreate.jsx';
 import CookCreate from './pages/CookCreate.jsx';
 import CarList from './pages/CarList.jsx';
+import CookList from './pages/CookList.jsx';
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ function App() {
          <Route path="/create-car" element={<CarCreate />} />
         <Route path="/create-cook" element={<CookCreate />} />
         <Route path="/cars" element={<CarList />} />
+        <Route path='/cooks' element={<CookList /> } />
         </Routes>
       </div>
     </BrowserRouter>
