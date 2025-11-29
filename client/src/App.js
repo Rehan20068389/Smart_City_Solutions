@@ -8,6 +8,8 @@ import CarCreate from './pages/CarCreate.jsx';
 import CookCreate from './pages/CookCreate.jsx';
 import CarList from './pages/CarList.jsx';
 import CookList from './pages/CookList.jsx';
+import UserDashboard from './components/UserDashboard.js';
+import ProviderDashboard from './components/providerDashboard.js';
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +23,8 @@ function App() {
         <Route path="/create-cook" element={<CookCreate />} />
         <Route path="/cars" element={<CarList />} />
         <Route path='/cooks' element={<CookList /> } />
+        <Route path="/user-dashboard" element={<UserDashboard />} />
+<Route path="/provider-dashboard" element={<ProviderDashboard />} />
         </Routes>
       </div>
     </BrowserRouter>
