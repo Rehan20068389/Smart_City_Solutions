@@ -5,8 +5,8 @@ export default function ProviderDashboard() {
       <p>You can add cars & cooks here.</p>
 
       <ul>
-        <li><a href="/add-car">Add Car</a></li>
-        <li><a href="/add-cook">Add Cook</a></li>
+        <li><a href="/create-car">Add Car</a></li>
+        <li><a href="/create-cook">Add Cook</a></li>
       </ul>
     </div>
   );

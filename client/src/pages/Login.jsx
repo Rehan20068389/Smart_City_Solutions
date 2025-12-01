@@ -10,8 +10,9 @@ export default function Login() {
     e.preventDefault();
     try {
     const res = await api.post('/auth/login', form);
+    console.log("Role from backend:", res.data.user.role);
     localStorage.setItem('token', res.data.token);
-    localStorage.setItem('role', res.data.user.role);
+    localStorage.setItem("user",JSON.stringify(res.data.user));
 
     // redirect based on the user
      if (res.data.user.role === 'provider') {
