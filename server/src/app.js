@@ -6,8 +6,9 @@ const carRoute = require("./routes/cars");
 const cookRoutes = require("./routes/cooks");
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
 
+
+app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/cars", carRoute);
 app.use("/api/cooks", cookRoutes);

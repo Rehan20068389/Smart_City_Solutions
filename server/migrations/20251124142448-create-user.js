@@ -18,6 +18,11 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
+       role: {                       // added role field
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'user'       
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
