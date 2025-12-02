@@ -39,9 +39,15 @@ export default function Nav() {
         <div className='nav-links'>
           <Link to="/">Home</Link>
           <Link to="/cars">Cars</Link>
-          <Link to="/create-car">Add Car</Link>
+
+          {user?.role === "provider" && ( //only showing the Adding option for service providers, hides it from normal user
+            <>                           
+             <Link to="/create-car">Add Car</Link>
+             <Link to="/create-cook">Add Cook</Link>
+            </>
+          )}
+         
           <Link to="/cooks">Cooks</Link>
-          <Link to="/create-cook">Add Cook</Link>
           <Link to="/booking">New Booking</Link>
           <Link to="/mybookings">Bookings</Link>
         </div>
