@@ -1,5 +1,8 @@
 const router = require('express').Router();
 const ctrl = require('../controllers/cooksController.js');
+const auth = require('../middlewares/auth');// provider authentication
+
+router.use(auth); // sets req.user for these routes
 
 router.post('/', ctrl.createCook);
 router.get('/', ctrl.listCooks);
