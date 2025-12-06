@@ -1,22 +1,17 @@
+//Used chatgpt from the creation
+//this migration is used to create a 'role' cloum in the users table
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
+  async up(queryInterface, Sequelize) {
+    await queryInterface.addColumn('Users', 'role', {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: 'user'
+    });
   },
 
-  async down (queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+  async down(queryInterface, Sequelize) {
+    await queryInterface.removeColumn('Users', 'role');
   }
 };
