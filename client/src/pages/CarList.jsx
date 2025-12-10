@@ -25,7 +25,7 @@ export default function CarList() {
   }, []);
   
   async function fetchCars(){ // in here all the cars are listed.
-    const res = await api.get('/cars');//to get all the cars api call to the banckend side.
+    const res = await api.get('/cars/public');//to get all the cars api call to the banckend side.
     setCars(res.data);
   }
 

@@ -20,7 +20,19 @@ const { Car } = require('../models');
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
-exports.listCars = async (req, res) => {
+    //my own modification 
+exports.listAllCars = async (req, res) => {//here all users can see the cars which are  available
+  try {
+    const cars = await Car.findAll();   //to list all the cars for the user
+    res.json(cars);
+  } catch (error) {
+    console.error("Error listing all cars:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+   //my own modification
+exports.listProviderCars = async (req, res) => {
   try {
     const cars = await Car.findAll({
       where: { providerId: req.user.id }//showing only logedin providers cars
