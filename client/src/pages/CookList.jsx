@@ -22,11 +22,8 @@ const user = JSON.parse(localStorage.getItem("user"));//
 const isProvider = user?.role === "provider";//
 
 
-  useEffect(() => {  //from this to: my own modification code
-    fetchItems();
-  }, []);
   async function fetchItems(){
-    const res = await api.get('/cooks');//api request for fetching all the cooks details which are
+    const res = await api.get('/cooks/public');//api request for fetching all the cooks details which are
     setItems(res.data);                 //created by the current loged In provider.
   }
   async function deleteItem(id){
@@ -132,7 +129,7 @@ const isProvider = user?.role === "provider";//
    </>
  )}
       {/* Table */}
-      <h2>Cooks</h2>
+      
       <table border="1" cellPadding="6">
         <thead>
           <tr>

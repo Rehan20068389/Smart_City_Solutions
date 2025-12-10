@@ -19,7 +19,19 @@ exports.createCook = async (req, res) => {
   }
   
 };
-exports.listCooks = async (req, res) => {
+//my own modifications
+exports.listAllCooks = async (req, res) => {
+  try {
+    const cooks = await Cook.findAll(); // here fetching athe cooks
+    res.json(cooks);
+  } catch (error) {
+    console.error("Error listing all cooks:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+//my own modification
+exports.listProviderCooks = async (req, res) => {
   try {
     const cooks = await Cook.findAll({
       where: { providerId: req.user.id }//only loggedin providers cooks
