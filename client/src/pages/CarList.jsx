@@ -1,6 +1,6 @@
 //Referance from youtube "https://youtu.be/La5cL2jNoVw?si=Xg-4nxotDtM6htIL"
 //used chatgpt for the forms and table structure 
-// "https://chatgpt.com/g/g-p-6931b1a54e548191b62a939dda79a3c1-programming/c/6936b612-815c-832f-a737-29cc8ac476c2"
+//https://chatgpt.com/share/6939ba10-0150-8008-b128-7f634e81db1a
 import React, { useEffect, useState } from 'react';
 import api from '../api/api';
 
@@ -17,21 +17,25 @@ export default function CarList() {
 
   const [editingId, setEditingId] = useState(null);
 
+   const user = JSON.parse(localStorage.getItem("user"));
+  const isProvider = user?.role === "provider";
+
   useEffect(() => {
     fetchCars();
   }, []);
   
-  async function fetchCars(){ // in here all the cars are listed
-    const res = await api.get('/cars');//to get all the cars 
+  async function fetchCars(){ // in here all the cars are listed.
+    const res = await api.get('/cars');//to get all the cars api call to the banckend side.
     setCars(res.data);
   }
 
    async function handleSubmit(e) {
     e.preventDefault();
+       if (!isProvider) return alert("Not authorized");// its not from the provider then return alert
 
     if (editingId) {
       // To update the cars
-      await api.put(`/cars/${editingId}`, form);
+      await api.put(`/cars/${editingId}`, form);//here api request to edit the car details by using the editingid.
       setEditingId(null);
     } else {
       // to create 
@@ -51,12 +55,16 @@ export default function CarList() {
 
 
   async function deleteCar(id){// here the cars are deleted 
-    await api.delete(`/cars/${id}`);
+       if (!isProvider) return alert("Not authorized");// its not from the provider then return alert
+
+    await api.delete(`/cars/${id}`);//api request to delete the cars with creation Id
     fetchCars();
   }
 
  function editCar(car) { // here loading the car data into from for editing
-    setEditingId(car.id);
+       if (!isProvider) return;// its not from the provider then return 
+ 
+  setEditingId(car.id);
     setForm({
       model: car.model,
       type: car.type,
@@ -69,11 +77,16 @@ export default function CarList() {
   return (
    
      <div style={{ padding: "20px" }}>
-      <h2>Car Management </h2>
+      <h2>Cars  </h2>
 
-      {/* Form */}
+      {/* Provider Form */}
+      {isProvider && (//giving the update ,delete options to the provder only
+        <>
+           <h3>{editingId ? "Update Car" : "Add New Car"}</h3>
+      
+      
       <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
-        <h3>{editingId ? "Update Car" : "Add New Car"}</h3>
+       
 
         <input
           placeholder="Model"
@@ -138,7 +151,8 @@ export default function CarList() {
           </button>
         )}
       </form>
-
+      </>
+     )}
       {/* Table */}
       <table border="1" cellPadding="8">
         <thead>
@@ -149,7 +163,7 @@ export default function CarList() {
             <th>Price/Day</th>
             <th>Location</th>
             <th>Driver?</th>
-            <th>Actions</th>
+            {isProvider && <th>Actions</th>}
           </tr>
         </thead>
 
@@ -162,12 +176,14 @@ export default function CarList() {
               <td>{c.price_per_day}</td>
               <td>{c.location}</td>
               <td>{c.with_driver ? "Yes" : "No"}</td>
-
+            
+            {isProvider && (//only giving the providers the buttons to update and delete
               <td>
                 <button onClick={() => editCar(c)}>Edit</button>
                 &nbsp;
                 <button onClick={() => deleteCar(c.id)}>Delete</button>
               </td>
+              )}
             </tr>
           ))}
         </tbody>

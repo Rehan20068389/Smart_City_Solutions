@@ -1,3 +1,5 @@
+//Referance from youtube :"https://youtu.be/bVl5_UdcAy0?si=z54IW0E819Oh_uDr"
+//Referance from chatgpt
 import React, { useState } from 'react';
 import api from '../api/api';
 import { redirect, useNavigate } from 'react-router-dom';
@@ -18,7 +20,7 @@ export default function Login() {
      if (res.data.user.role === 'provider') {
       navigate('/provider-dashboard');
     } else {
-      navigate('/user-dashboard');
+      navigate('/');//redirect to homepage
     }
    } catch (err) {
       // catch Axios errors

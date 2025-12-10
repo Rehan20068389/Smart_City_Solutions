@@ -1,6 +1,6 @@
 //Referance from youtube:"https://youtu.be/La5cL2jNoVw?si=Xg-4nxotDtM6htIL"
 //Referance from youtube:"https://www.youtube.com/watch?v=-4XpG5_Lj_o"
-//Referance from chatgpt
+//Referance from chatgpt:"https://chatgpt.com/share/6939ba10-0150-8008-b128-7f634e81db1a"
 import React, { useEffect, useState } from 'react';
 import api from '../api/api';
 
@@ -18,21 +18,26 @@ export default function CookList() {
   
   const [editId, setEditId] = useState(null);
 
-  useEffect(() => {  //from this to: my own written code
+const user = JSON.parse(localStorage.getItem("user"));//
+const isProvider = user?.role === "provider";//
+
+
+  useEffect(() => {  //from this to: my own modification code
     fetchItems();
   }, []);
   async function fetchItems(){
-    const res = await api.get('/cooks');
-    setItems(res.data);
+    const res = await api.get('/cooks');//api request for fetching all the cooks details which are
+    setItems(res.data);                 //created by the current loged In provider.
   }
   async function deleteItem(id){
-    await api.delete(`/cooks/${id}`);
-    fetchItems();
+    if (!isProvider) return alert("Not authorized");//
+    await api.delete(`/cooks/${id}`);//api request for the delecting a particular cook details by using the 
+    fetchItems();                    //cooks Id.
   } //to this.
 
   async function submit(e) {//its from chatgpt
     e.preventDefault();
-
+    if (!isProvider) return alert("Not authorized");// its not from the provider then return alert
     if (editId) {
       // Update cook
       await api.put(`/cooks/${editId}`, form);
@@ -53,9 +58,10 @@ export default function CookList() {
     fetchItems();//here getting the cooks data 
   }
 
-  function startEdit(cook) {
-    setEditId(cook.id);
-    setForm({
+  function startEdit(cook) { //here the function were the cook can change the details.
+    if (!isProvider) return;// its not from the provider then return 
+    setEditId(cook.id);//cookId is passed here for edit option.
+    setForm({//In this form getting all the details of the cook for the edit option
       name: cook.name,
       experience_years: cook.experience_years,
       specialties: cook.specialties,
@@ -65,11 +71,17 @@ export default function CookList() {
   }
 
   return (
-    //the form filed and table styling are updated with chatgpt code from my own code
-   <div>  
-      <h2>{editId ? 'Edit Cook' : 'Add Cook'}</h2>
+    //the form filed and table styling are updated with chatgpt code from my own modification code
+   <div style={{padding: 20}}>  
+      <h2>Cooks</h2>
 
-      {/* Form */}
+       {/* PROVIDER ONLY FORM */}
+    {isProvider && ( //if its a provider then ,can do update and delete operations 
+      <>
+      <h3>{editId ? "Edit Cook" : "Add Cook"}</h3>
+   
+   
+      
       <form onSubmit={submit} style={{ marginBottom: "20px" }}>
         <input
           placeholder="Name"
@@ -117,7 +129,8 @@ export default function CookList() {
           {editId ? 'Update Cook' : 'Create Cook'}
         </button>
       </form>
-
+   </>
+ )}
       {/* Table */}
       <h2>Cooks</h2>
       <table border="1" cellPadding="6">
@@ -129,7 +142,7 @@ export default function CookList() {
             <th>Rate</th>
             <th>Specialties</th>
             <th>Rating</th>
-            <th>Actions</th>
+            {isProvider && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -141,7 +154,7 @@ export default function CookList() {
               <td>{c.daily_rate}</td>
               <td>{c.specialties}</td>
               <td>{c.rating}</td>
-
+          {isProvider && ( //here only showing buttons to the provider
               <td>
                 {/*  the update and delete buttons are here the onclick function calling */}
                 <button onClick={() => startEdit(c)}>Edit</button>
@@ -149,6 +162,7 @@ export default function CookList() {
                   Delete
                 </button>
               </td>
+              )}
             </tr>
           ))}
         </tbody>
