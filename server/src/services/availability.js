@@ -3,20 +3,21 @@
 const { Booking } = require('../models');
 const { Op } = require('sequelize');
 
+ // my own modifications
 async function isAvailable(serviceType, serviceId, fromDate, toDate) {
   const overlapping = await Booking.findOne({
     where: {
-      service_type: serviceType,
-      service_id: serviceId,
+      serviceType,
+      serviceId,
       status: 'confirmed',
       [Op.or]: [
-        { from_date: { [Op.between]: [fromDate, toDate] } },
-        { to_date: { [Op.between]: [fromDate, toDate] } },
-        { from_date: { [Op.lte]: fromDate }, to_date: { [Op.gte]: toDate } }
+        { fromDate: { [Op.between]: [fromDate, toDate] } },
+        { toDate: { [Op.between]: [fromDate, toDate] } },
+        { fromDate: { [Op.lte]: fromDate }, todate: { [Op.gte]: toDate } }
       ]
     }
   });
-  return overlapping ? false : true;
+  return  !overlapping;
 }
 
 module.exports = { isAvailable };

@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const ctrl = require('../controllers/bookingsController');
+const bookingsController = require('../controllers/bookingsController');
 
-router.post('/', ctrl.createBooking);
-router.get('/', ctrl.listBookings);
-router.get('/:id', ctrl.getBooking);
-router.put('/:id', ctrl.updateBooking);
-router.delete('/:id', ctrl.deleteBooking);
+router.post('/', bookingsController.createBooking);
+router.get('/', bookingsController.listBookings);
+router.get('/:id', bookingsController.getBooking);
+router.put('/:id', bookingsController.updateBooking);
+router.delete('/:id', bookingsController.deleteBooking);
 
 module.exports = router;

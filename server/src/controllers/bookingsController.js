@@ -4,24 +4,43 @@ const { Booking, Car, Cook } = require('../models');
 const { isAvailable } = require('../services/availability');
 
 async function createBooking(req, res) {
-  const payload = req.body;
-  const { service_type, service_id, from_date, to_date } = payload;
-
-  if(service_type === 'car') {
-    const car = await Car.findByPk(service_id);
-    if(!car) return res.status(400).json({ message: 'Car not found' });
-  } else if(service_type === 'cook') {
-    const cook = await Cook.findByPk(service_id);
-    if(!cook) return res.status(400).json({ message: 'Cook not found' });
+try{
+    const { userId, serviceType, serviceId, fromDate, toDate, pickupLocation, dropLocation, price } = req.body;
+   //my own modifications
+  let service;   
+  if(serviceType === 'car') {
+    service = await Car.findByPk(serviceId);
+    
+  } else if(serviceType === 'cook') {
+    service = await Cook.findByPk(serviceId);
+    
   } else {
     return res.status(400).json({ message: 'Invalid service_type' });
   }
 
-  const ok = await isAvailable(service_type, service_id, from_date, to_date);
+    if(!service) return res.status(404).json({ message: `${serviceType} not found` });
+
+ //checking the availability
+const available = await isAvailable(serviceType, serviceId, fromDate, toDate);
   if(!ok) return res.status(409).json({ message: 'Service not available for selected dates' });
 
-  const booking = await Booking.create(payload);
+  const booking = await Booking.create({
+     userId,
+      serviceType,
+      serviceId,
+      fromDate,
+      toDate,
+      pickupLocation,
+      dropLocation,
+      price,
+      status: 'confirmed',
+      paymentStatus: 'unpaid'
+  });
   res.status(201).json(booking);
+}catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }
 
 async function listBookings(req, res) {
@@ -35,8 +54,8 @@ async function getBooking(req, res) {
 }
 async function updateBooking(req, res) {
   await Booking.update(req.body, { where: { id: req.params.id }});
-  const b = await Booking.findByPk(req.params.id);
-  res.json(b);
+  const updated = await Booking.findByPk(req.params.id);
+  res.json(updated);
 }
 async function deleteBooking(req, res) {
   await Booking.destroy({ where: { id: req.params.id }});
