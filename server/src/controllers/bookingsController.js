@@ -3,6 +3,7 @@
 const { Booking, Car, Cook } = require('../models');
 const { isAvailable } = require('../services/availability');
 
+
 async function createBooking(req, res) {
 try{
     const { userId, serviceType, serviceId, fromDate, toDate, pickupLocation, dropLocation, price } = req.body;
@@ -22,19 +23,20 @@ try{
 
  //checking the availability
 const available = await isAvailable(serviceType, serviceId, fromDate, toDate);
-  if(!ok) return res.status(409).json({ message: 'Service not available for selected dates' });
-
-  const booking = await Booking.create({
+  if(!available){
+     return res.status(409).json({ message: 'Service not available for selected dates' });
+  }
+  const booking = await Booking.create({//create booking
      userId,
-      serviceType,
-      serviceId,
-      fromDate,
-      toDate,
-      pickupLocation,
-      dropLocation,
+      service_type: serviceType,
+      service_id: serviceId,
+      from_date: fromDate,
+      to_date: toDate,
+      pickup_location: pickupLocation,
+      drop_location: dropLocation,
       price,
       status: 'confirmed',
-      paymentStatus: 'unpaid'
+      payment_status: 'unpaid'
   });
   res.status(201).json(booking);
 }catch (err) {

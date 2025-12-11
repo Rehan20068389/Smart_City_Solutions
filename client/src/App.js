@@ -10,6 +10,7 @@ import CarList from './pages/CarList.jsx';
 import CookList from './pages/CookList.jsx';
 import UserDashboard from './components/UserDashboard.js';
 import ProviderDashboard from './components/providerDashboard.js';
+import BookingForm from './pages/BookingForm.jsx';
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +26,7 @@ function App() {
         <Route path='/cooks' element={<CookList /> } />
         <Route path="/user-dashboard" element={<UserDashboard />} />
 <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+<Route path='/booking' element={<BookingForm />} />
         </Routes>
       </div>
     </BrowserRouter>

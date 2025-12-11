@@ -1,32 +1,48 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Booking extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  Booking.init({
-    user_name: DataTypes.STRING,
-    service_type: DataTypes.STRING,
-    service_id: DataTypes.INTEGER,
-    from_date: DataTypes.DATE,
-    to_date: DataTypes.DATE,
-    pickup_location: DataTypes.STRING,
-    drop_location: DataTypes.STRING,
+  const Booking = sequelize.define('Booking', {
+    userName: {           // maps to `user_name` in DB
+      type: DataTypes.STRING,
+      field: 'user_name'
+    },
+    serviceType: {        // maps to `service_type` in DB
+      type: DataTypes.STRING,
+      field: 'service_type'
+    },
+    serviceId: {          // maps to `service_id` in DB
+      type: DataTypes.INTEGER,
+      field: 'service_id'
+    },
+    fromDate: {           // maps to `from_date` in DB
+      type: DataTypes.DATEONLY,
+      field: 'from_date'
+    },
+    toDate: {             // maps to `to_date` in DB
+      type: DataTypes.DATEONLY,
+      field: 'to_date'
+    },
+    pickupLocation: {     // maps to `pickup_location` in DB
+      type: DataTypes.STRING,
+      field: 'pickup_location'
+    },
+    dropLocation: {       // maps to `drop_location` in DB
+      type: DataTypes.STRING,
+      field: 'drop_location'
+    },
     price: DataTypes.FLOAT,
-    status: DataTypes.STRING,
-    payment_status: DataTypes.STRING
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'pending'
+    },
+    paymentStatus: {      // maps to `payment_status` in DB
+      type: DataTypes.STRING,
+      field: 'payment_status',
+      defaultValue: 'unpaid'
+    }
   }, {
-    sequelize,
-    modelName: 'Booking',
+    tableName: 'bookings',  // ensures Sequelize uses the correct table name
+    timestamps: true        // uses `createdAt` and `updatedAt`
   });
+
   return Booking;
 };

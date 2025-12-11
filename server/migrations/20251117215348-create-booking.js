@@ -8,54 +8,59 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userId: {               // Reference user
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+         references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
       service_type: {    //car or cook
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       service_id: { //carId or cookId
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       from_date: {
-        type: Sequelize.DATE,
-        allowNull: false
+        type: Sequelize.DATEONLY,
+        allowNull: false,
       },
       to_date: {
-        type: Sequelize.DATE,
-        allowNull: false
+        type: Sequelize.DATEONLY,
+        allowNull: false,
       },
       pickup_location: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       drop_location: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       price: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
       },
       status: { // confirmed,pending,cancelled
         type: Sequelize.STRING,
-        defaultValue: 'pending'
+        defaultValue: 'pending',
       },
       payment_status: {
         type: Sequelize.STRING,
-        defaultValue: 'unpaid'
+        defaultValue: 'unpaid',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       }
     });
   },
