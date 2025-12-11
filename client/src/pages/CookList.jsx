@@ -6,7 +6,7 @@ import api from '../api/api';
 
 export default function CookList() {
   const [items, setItems] = useState([]);
-  useEffect(()=> { fetchItems(); }, []); //the useEffect is used to fetch the deatils
+ 
 
   const [form, setForm] = useState({//this is from chatgpt
     name: '',
@@ -21,10 +21,21 @@ export default function CookList() {
 const user = JSON.parse(localStorage.getItem("user"));//
 const isProvider = user?.role === "provider";//
 
+ useEffect(()=> { fetchItems(); }, []); //the useEffect is used to fetch the deatils
 
+  //my own modications
   async function fetchItems(){
-    const res = await api.get('/cooks/public');//api request for fetching all the cooks details which are
+    try {
+    let res;
+    if (isProvider){
+      res = await api.get('/cooks');
+    }else {
+     res = await api.get('/cooks/public');//api request for fetching all the cooks details which are
+    }   
     setItems(res.data);                 //created by the current loged In provider.
+  } catch (err) {
+    console.error("fetch cooks error:",err);
+  }
   }
   async function deleteItem(id){
     if (!isProvider) return alert("Not authorized");//

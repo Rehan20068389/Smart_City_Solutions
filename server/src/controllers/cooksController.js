@@ -7,14 +7,21 @@ const { Cook } = require('../models');
 exports.createCook = async (req, res) => {
    try {
     if (!req.user) return res.status(401).json({ message: 'Authentication required' });
-    const { name, experience_years, specialties, daily_rate, rating } = req.body;
+
+     if (req.user.role !== 'provider')
+      return res.status(403).json({ message: 'Only providers can add cooks' });
+   
+     const { name, experience_years, specialties, daily_rate, rating } = req.body;
+
     const cook = await Cook.create({// saves a new cook in the database
       name, experience_years, specialties, daily_rate, rating,
       providerId: req.user.id//provider association
     });
+
     res.status(201).json(cook);
+
   } catch (err) {
-    console.error(err);
+    console.error("Create Cook Error:", err);
     res.status(500).json({ message: 'Server error', error: err.message });
   }
   
@@ -32,15 +39,22 @@ exports.listAllCooks = async (req, res) => {
 
 //my own modification
 exports.listProviderCooks = async (req, res) => {
-  try {
+  try { 
+
+    if (!req.user)
+      return res.status(401).json({ message: "Authentication required" });
+
+    if (req.user.role !== "provider")
+      return res.status(403).json({ message: "Only providers can access this" });
+
     const cooks = await Cook.findAll({
       where: { providerId: req.user.id }//only loggedin providers cooks
     });
 
     res.json(cooks);
-  } catch (error) {
-    console.error("Error listing cooks:", error);
-    res.status(500).json({ message: "Server error" });
+  } catch (err) {
+    console.error("List Provider Cooks Error:", err);
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -65,10 +79,14 @@ exports.updateCook = async (req, res) => {
       return res.status(403).json({ message: 'Forbidden: not owner' });
     }
 
-    await cook.update(req.body);
+    await cook.update({
+  ...req.body,
+  providerId: req.user.id  // ensure providerId stays correct
+});
+
     res.json(cook);
   } catch (err) {
-    console.error(err);
+      console.error("Update Cook Error:", err);
     res.status(500).json({ error: err.message });
   }
  
@@ -88,7 +106,7 @@ exports.deleteCook = async (req, res) => {
     await cook.destroy();
     res.status(204).send();
   } catch (err) {
-    console.error(err);
+    console.error("Delete Cook Error:", err);
     res.status(500).json({ error: err.message });
   }
  

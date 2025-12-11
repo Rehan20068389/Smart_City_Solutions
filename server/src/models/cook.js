@@ -18,7 +18,17 @@ module.exports = (sequelize, DataTypes) => {
     experience_years: DataTypes.INTEGER,
     specialties: DataTypes.STRING,
     daily_rate: DataTypes.FLOAT,
-    rating: DataTypes.FLOAT
+    rating: DataTypes.FLOAT,
+    providerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false, // optional: enforce that every cook must have a provider
+      references: {
+        model: 'Users',
+        key: 'id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    }
   }, {
     sequelize,
     modelName: 'Cook',
