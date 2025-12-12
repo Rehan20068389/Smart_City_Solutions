@@ -1,11 +1,12 @@
 const router = require('express').Router();
 const bookingsController = require('../controllers/bookingsController');
+const authMiddleware = require('../middlewares/auth');
 
-router.post('/', bookingsController.createBooking);
-router.get('/', bookingsController.listBookings);
-
-router.get('/:id', bookingsController.getBooking);
-router.put('/:id', bookingsController.updateBooking);
-router.delete('/:id', bookingsController.deleteBooking);
+//modifications on the route for authentications.
+router.post('/',authMiddleware, bookingsController.createBooking);
+router.get('/',authMiddleware, bookingsController.listBookings);
+router.get('/:id',authMiddleware, bookingsController.getBooking);
+router.put('/:id',authMiddleware, bookingsController.updateBooking);
+router.delete('/:id',authMiddleware, bookingsController.deleteBooking);
 
 module.exports = router;
