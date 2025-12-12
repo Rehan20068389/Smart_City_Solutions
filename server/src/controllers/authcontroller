@@ -1,3 +1,5 @@
+//Referance from youtube:"https://youtu.be/tBObk72EYYw?si=IGXbiNqtLD-ReXBw"
+//Referance from chatgpt:"https://chatgpt.com/share/693ac586-38b8-8008-890e-ab3f41dd6abb"
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -42,3 +44,8 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: 'Server Error' });
   }
 };
+exports.getMe = async (req, res) => {
+  if (!req.user) return res.status(401).json({ message: 'Unauthorized' });
+  res.json(req.user);
+};
+

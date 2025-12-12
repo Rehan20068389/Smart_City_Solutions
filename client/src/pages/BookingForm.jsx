@@ -1,6 +1,5 @@
-//Referance from chatgpt: "https://chatgpt.com/share/693ac586-38b8-8008-890e-ab3f41dd6abb"
-//Referance from youtube: ""
-
+//Referance from chatgpt:"https://chatgpt.com/share/693ac586-38b8-8008-890e-ab3f41dd6abb"
+//Referance from youtube:"https://youtu.be/tBObk72EYYw?si=IGXbiNqtLD-ReXBw"
 import React, { useState, useEffect } from "react";
 import api from "../api/api";
 
@@ -8,7 +7,6 @@ export default function BookingForm() {
   const [cars, setCars] = useState([]);
   const [cooks, setCooks] = useState([]);
   const [form, setForm] = useState({
-    userId: "",
     serviceType: "car",
     serviceId: "",
     fromDate: "",
@@ -21,21 +19,13 @@ export default function BookingForm() {
   useEffect(() => {
     async function loadData() {
       try {
-        // Get logged-in user
-        const userRes = await api.get("/auth/me");
-        setForm(f => ({ ...f, userId: userRes.data.id }));
-
-        // Load cars & cooks
-        const carsRes = await api.get("/cars");
+        const carsRes = await api.get("/cars/public");
         setCars(carsRes.data);
 
-        const cooksRes = await api.get("/cooks");
+        const cooksRes = await api.get("/cooks/public");
         setCooks(cooksRes.data);
       } catch (err) {
         console.error("Error loading data:", err.response?.status, err.message);
-        if (err.response?.status === 403) {
-          alert("You are not authorized. Please log in.");
-        }
       }
     }
     loadData();
@@ -43,13 +33,12 @@ export default function BookingForm() {
 
   async function submit(e) {
     e.preventDefault();
-    const payload = { ...form, serviceId: Number(form.serviceId), price: Number(form.price) };
     try {
-      const res = await api.post("/bookings", payload);
+      const payload = { ...form, serviceId: Number(form.serviceId), price: Number(form.price) };
+      const res = await api.post("/bookings", payload); // userId not needed
       alert("Booking created: " + res.data.id);
 
       setForm({
-        ...form,
         serviceType: "car",
         serviceId: "",
         fromDate: "",
@@ -60,29 +49,17 @@ export default function BookingForm() {
       });
     } catch (err) {
       console.error(err);
-      if (err.response?.status === 409) {
-        alert("Service not available for selected dates");
-      } else {
-        alert("Error: " + err.message);
-      }
+      if (err.response?.status === 409) alert("Service not available for selected dates");
+      else if (err.response?.status === 401) alert("Unauthorized. Please log in.");
+      else alert("Error: " + err.message);
     }
   }
 
   return (
-    <form onSubmit={submit} style={{ padding: 20 }}>
-      <h2>Create Booking</h2>
-
-      <div>
-        <label>User ID: </label>
-        <input value={form.userId} disabled />
-      </div>
-
+    <form onSubmit={submit}>
       <div>
         <label>Service Type: </label>
-        <select
-          value={form.serviceType}
-          onChange={e => setForm({ ...form, serviceType: e.target.value, serviceId: "" })}
-        >
+        <select value={form.serviceType} onChange={e => setForm({ ...form, serviceType: e.target.value, serviceId: "" })}>
           <option value="car">Car</option>
           <option value="cook">Cook</option>
         </select>
@@ -92,38 +69,20 @@ export default function BookingForm() {
         <label>Choose {form.serviceType}: </label>
         <select value={form.serviceId} onChange={e => setForm({ ...form, serviceId: e.target.value })}>
           <option value="">-- Select --</option>
-          {form.serviceType === "car"
-            ? cars.map(c => <option key={c.id} value={c.id}>{c.id} - {c.model}</option>)
-            : cooks.map(k => <option key={k.id} value={k.id}>{k.id} - {k.name}</option>)}
+          {form.serviceType === "car" 
+            ? cars.map(c => <option key={c.id} value={c.id}>{c.model}</option>)
+            : cooks.map(c => <option key={c.id} value={c.id}>{c.name}</option>)
+          }
         </select>
       </div>
 
-      <div>
-        <label>From Date: </label>
-        <input type="date" value={form.fromDate} onChange={e => setForm({ ...form, fromDate: e.target.value })} />
-      </div>
+      <input type="date" value={form.fromDate} onChange={e => setForm({ ...form, fromDate: e.target.value })} />
+      <input type="date" value={form.toDate} onChange={e => setForm({ ...form, toDate: e.target.value })} />
+      <input placeholder="Pickup location" value={form.pickupLocation} onChange={e => setForm({ ...form, pickupLocation: e.target.value })} />
+      <input placeholder="Drop location" value={form.dropLocation} onChange={e => setForm({ ...form, dropLocation: e.target.value })} />
+      <input type="number" placeholder="Price" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} />
 
-      <div>
-        <label>To Date: </label>
-        <input type="date" value={form.toDate} onChange={e => setForm({ ...form, toDate: e.target.value })} />
-      </div>
-
-      <div>
-        <label>Pickup Location: </label>
-        <input value={form.pickupLocation} onChange={e => setForm({ ...form, pickupLocation: e.target.value })} />
-      </div>
-
-      <div>
-        <label>Drop Location: </label>
-        <input value={form.dropLocation} onChange={e => setForm({ ...form, dropLocation: e.target.value })} />
-      </div>
-
-      <div>
-        <label>Price: </label>
-        <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} />
-      </div>
-
-      <button type="submit" style={{ marginTop: 10 }}>Book</button>
+      <button type="submit">Book</button>
     </form>
   );
 }
