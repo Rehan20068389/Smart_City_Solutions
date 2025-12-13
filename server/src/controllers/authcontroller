@@ -30,6 +30,11 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ where: { email } });
     if (!user) return res.status(400).json({ error: 'User not found' });
 
+     // my own modifications
+    if (user.isActive === false) {
+      return res.status(403).json({ error: 'Your account is disabled. Contact admin.' });
+    }
+
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ error: 'Wrong password' });

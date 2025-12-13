@@ -31,7 +31,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: "user",   // user = normal user,  provider = service provider
         allowNull: false
-      }
+      },
+       isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
     {
       sequelize,
