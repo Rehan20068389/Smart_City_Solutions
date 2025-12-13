@@ -21,7 +21,7 @@ export default function HomePage() {
         <div style={card}>
           <h3>Bookings</h3>
           <p>View your bookings.</p>
-          <a href="/mybookings">View</a>
+          <a href="/my-bookings">View</a>
         </div>
       </div>
     </div>

@@ -4,8 +4,8 @@ const authMiddleware = require('../middlewares/auth');
 
 //modifications on the route for authentications.
 router.get('/my', authMiddleware, bookingsController.getMyBookings);
-
 router.post('/',authMiddleware, bookingsController.createBooking);
+router.put('/:id/cancel', authMiddleware, bookingsController.cancelBooking);
 router.get('/',authMiddleware, bookingsController.listBookings);
 router.get('/:id',authMiddleware, bookingsController.getBooking);
 router.put('/:id',authMiddleware, bookingsController.updateBooking);

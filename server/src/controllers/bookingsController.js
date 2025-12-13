@@ -172,5 +172,57 @@ async function createBooking(req, res) {
   }
 }
 
+//my own modifications
+// cancelbooking function for the user
+async function cancelBooking(req, res) {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-module.exports = { createBooking, listBookings, getBooking, updateBooking, deleteBooking, getMyBookings };
+    const bookingId = req.params.id;
+
+    const booking = await Booking.findOne({
+      where: {
+        id: bookingId,
+        userId: req.user.id
+      }
+    });
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    if (booking.status === "cancelled") {
+      return res.status(400).json({ message: "Booking already cancelled" });
+    }
+
+    booking.status = "cancelled";    // Cancel booking
+
+    await booking.save();
+
+    if (booking.serviceType === "car") {    //  free availability flag only if you use isAvailable)
+      await Car.update(
+        { isAvailable: true },
+        { where: { id: booking.serviceId } }
+      );
+    }
+
+    if (booking.serviceType === "cook") {
+      await Cook.update(
+        { isAvailable: true },
+        { where: { id: booking.serviceId } }
+      );
+    }
+
+    res.json({ message: "Booking cancelled successfully" });
+
+  } catch (err) {
+    console.error("Cancel booking error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+
+module.exports = { createBooking, listBookings, getBooking, updateBooking, deleteBooking, getMyBookings,  cancelBooking
+ };
