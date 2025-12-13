@@ -12,6 +12,7 @@ export default function Login() {
     e.preventDefault();
     try {
     const res = await api.post('/auth/login', form);
+    const user = res.data.user;
     console.log("Role from backend:", res.data.user.role);
     localStorage.setItem('token', res.data.token);
     localStorage.setItem("user",JSON.stringify(res.data.user));
@@ -19,9 +20,12 @@ export default function Login() {
     // redirect based on the user
      if (res.data.user.role === 'provider') {
       navigate('/provider-dashboard');
-    } else {
+    }else if (user.role === 'admin') {
+        navigate('/admin'); // admin dashboard
+      } else {
       navigate('/');//redirect to homepage
     }
+
    } catch (err) {
       // catch Axios errors
       console.error(err);
