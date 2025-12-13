@@ -49,7 +49,7 @@ export default function Nav() {
          
           <Link to="/cooks">Cooks</Link>
           <Link to="/booking">New Booking</Link>
-          <Link to="/mybookings">Bookings</Link>
+          <Link to="/my-bookings">Bookings</Link>
         </div>
 
         {/* if user is logged in ,showing the user details */}
