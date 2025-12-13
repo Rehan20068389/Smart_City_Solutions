@@ -27,60 +27,6 @@ async function safeIsAvailable(serviceType, serviceId, fromDate, toDate) {
 }
 
 
-async function createBooking(req, res) {
-try{
-    const { serviceType, serviceId, fromDate, toDate, pickupLocation, dropLocation, price } = req.body;
-   //my own modifications
-  const user = req.user;
-  if (!user) return res.status(401).json({ message: 'Unauthorized' });
-
-  let service;   
-  if(serviceType === 'car') {
-    service = await Car.findByPk(serviceId);
-     if (!service) return res.status(404).json({ message: 'Car not found' });
-    if (!pickupLocation || !dropLocation)
-        return res.status(400).json({ message: 'Pickup and drop location required for car booking' });
-
-    
-  } else if(serviceType === 'cook') {
-    service = await Cook.findByPk(serviceId);
-     if (!service) return res.status(404).json({ message: 'Cook not found' });
-
-  } else {
-    return res.status(400).json({ message: 'Invalid service_type' });
-  }
-
-
- //checking the availability
-const available = await safeIsAvailable(serviceType, serviceId, fromDate, toDate);
-  if(!available){
-     return res.status(409).json({ message: 'Service not available for selected dates' });
-  }
-  const bookingData = {//create booking
-      userId: user.id,
-      user_name: user.name,
-      service_type: serviceType,
-      service_id: serviceId,
-      from_date: fromDate,
-      to_date: toDate,
-      price,
-      status: 'confirmed',
-      payment_status: 'unpaid'
-  };
-
-  if (serviceType === 'car') {
-      bookingData.pickup_location = pickupLocation;
-      bookingData.drop_location = dropLocation;
-    }
-
-    const booking = await Booking.create(bookingData);
-    res.status(201).json(booking);
-
-}catch (err) {
-    console.error("Create booking Error:", err);
-    res.status(500).json({ message: 'Internal server error',error:err.message });
-  }
-}
 //my own modifications
 
 async function listBookings(req, res) {//here listing the books
