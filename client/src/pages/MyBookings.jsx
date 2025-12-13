@@ -43,6 +43,25 @@ export default function MyBookings() {
       </p>
     );
 
+  //my own modifications
+  async function cancelBooking(id) {
+    const confirm = window.confirm("Are you sure you want to cancel this booking?");
+    if (!confirm) return;
+
+    try {
+      await api.put(`/bookings/${id}/cancel`);
+      fetchBookings(); // refresh list
+    } catch (err) {
+      alert(
+        err.response?.data?.message ||
+        "Failed to cancel booking"
+      );
+    }
+  }
+
+  if (loading) return <p style={{ padding: 20 }}>Loading bookings...</p>;
+  if (error) return <p style={{ padding: 20, color: "red" }}>{error}</p>;
+
   return (
     <div style={{ padding: 20 }}>
       <h2>My Bookings</h2>
@@ -84,6 +103,25 @@ export default function MyBookings() {
           <p><strong>Total Price:</strong> €{b.price}</p>
           <p><strong>Status:</strong> {b.status}</p>
           <p><strong>Payment:</strong> {b.paymentStatus}</p>
+
+          {/* my own modifications */}
+          {/* cancel button and function call */}
+          {b.status !== "cancelled" && (
+            <button
+              onClick={() => cancelBooking(b.id)}
+              style={{
+                marginTop: 10,
+                padding: "8px 12px",
+                background: "#e53935",
+                color: "#fff",
+                border: "none",
+                borderRadius: 4,
+                cursor: "pointer"
+              }}
+            >
+              Cancel Booking
+            </button>
+          )}
         </div>
       ))}
     </div>
