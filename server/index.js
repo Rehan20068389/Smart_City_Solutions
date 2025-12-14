@@ -32,7 +32,7 @@
 // });
 
 const express = require('express');
-const sequelize = require('./config/db');
+const sequelize = require('./config/database');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
