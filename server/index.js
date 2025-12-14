@@ -30,7 +30,7 @@
 //     console.error("DB Connection Failed:", error.message);
 //   }
 // });
-
+//
 const express = require('express');
 const sequelize = require('./config/database');
 
