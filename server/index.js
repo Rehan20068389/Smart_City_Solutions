@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 4000;
     await sequelize.authenticate();
     console.log("DB Connection Is OK !!");
   } catch (error) {
-    console.log("DB Connection Failed",err);
+    console.error("DB Connection Failed",err);
   }
 
 });
