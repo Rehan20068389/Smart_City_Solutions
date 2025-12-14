@@ -1,6 +1,6 @@
 // referance code from chatgpt
 const Sequelize = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../../config/database');
 
 //importing models
 const Car = require('./car')(sequelize, Sequelize.DataTypes);
