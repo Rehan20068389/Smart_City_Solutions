@@ -1,11 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const authRoute = require("./routes/auth");
-const carRoute = require("./routes/cars");
-const cookRoutes = require("./routes/cooks");
-const bookingRoutes = require("./routes/bookings")
-const adminRoutes = require('./routes/adminRoutes');
+const authRoute = require("./src/routes/auth");
+const carRoute = require("./src/routes/cars");
+const cookRoutes = require("./src/routes/cooks");
+const bookingRoutes = require("./src/routes/bookings")
+const adminRoutes = require('./src/routes/adminRoutes');
 
 const app = express();
 app.use(cors());
