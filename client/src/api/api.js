@@ -1,5 +1,5 @@
 import axios from 'axios';
-const api = axios.create({ baseURL: 'http://localhost:4000/api' });
+const api = axios.create({ baseURL: 'process.env.REACT_APP_API_URL || https:smart-city-solutions-backend.onrender.com/api', });
 
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
